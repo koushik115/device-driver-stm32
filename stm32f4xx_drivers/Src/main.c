@@ -35,7 +35,7 @@ int main(void)
 	GPIO_Handle_t GPIOUserConfig;
 	GPIOUserConfig.pGPIOx = GPIOD;
 	GPIOUserConfig.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUTPUT;
-	GPIOUserConfig.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_13;
+	GPIOUserConfig.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
 	GPIOUserConfig.GPIO_PinConfig.GPIO_PinOPType = GPIO_OUTPUT_TYPE_PUSHPULL;
 	GPIOUserConfig.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PULLUP_PULLDOWN;
 	GPIOUserConfig.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
@@ -43,10 +43,22 @@ int main(void)
 	GPIO_PeriphClockControl(GPIOD, ENABLE);
 
 	GPIO_Init(&GPIOUserConfig);
+	GPIOUserConfig.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_13;
+	GPIO_Init(&GPIOUserConfig);
+	GPIOUserConfig.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+	GPIO_Init(&GPIOUserConfig);
+	GPIOUserConfig.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
+	GPIO_Init(&GPIOUserConfig);
 
 	while(1) {
+		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_12);
+		delayUS(1000000 / 4);
 		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_13);
-		delayUS(1000000);
+		delayUS(1000000 / 4);
+		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_14);
+		delayUS(1000000 / 4);
+		GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_NO_15);
+		delayUS(1000000 / 4);
 	}
 	for(;;);
 }
