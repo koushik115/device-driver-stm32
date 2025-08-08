@@ -59,8 +59,8 @@ all: main-build
 main-build: HSE_Measurement.elf secondary-outputs
 
 # Tool invocations
-HSE_Measurement.elf HSE_Measurement.map: $(OBJS) $(USER_OBJS) C:\Users\kaush\OneDrive\Documents\ARM_Cortex_Mx\MCU1\HSE_Measurement\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "HSE_Measurement.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kaush\OneDrive\Documents\ARM_Cortex_Mx\MCU1\HSE_Measurement\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="HSE_Measurement.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+HSE_Measurement.elf HSE_Measurement.map: $(OBJS) $(USER_OBJS) C:\Users\kaush\git\device-driver-stm32\HSE_Measurement\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "HSE_Measurement.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kaush\git\device-driver-stm32\HSE_Measurement\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="HSE_Measurement.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
