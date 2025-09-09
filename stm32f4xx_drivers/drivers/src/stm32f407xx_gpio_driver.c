@@ -67,6 +67,55 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle) {
 		pGPIOHandle->pGPIOx->MODER |= regValue;
 	} else {
 		// Interrupt Mode
+		if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_INT_FALL_EDGE) {
+			// 1. Configure the FTSR register
+			EXTI->FTSR |= (0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			// 2. Clear the corresponding RTSR register
+			EXTI->RTSR &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		} else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_INT_RISE_EDGE) {
+			// 1. Configure the RTSR register
+			EXTI->RTSR |= (0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			// 2. Clear the corresponding FTSR register
+			EXTI->FTSR &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		} else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_INT_BOTH_EDGE) {
+			// 1. Configure the FTSR register
+			EXTI->FTSR |= (0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			// 2. Configure the RTSR register
+			EXTI->RTSR |= (0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+
+		// Configure the GPIO Port selection in SYSCFG_EXTICR
+		uint8_t regAddrOffset = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 4;
+		uint8_t regOffset = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 4;
+
+		regValue = 0x00;
+		if(pGPIOHandle->pGPIOx == GPIOA)
+			regValue = 0;
+		else if(pGPIOHandle->pGPIOx == GPIOB)
+			regValue = 1;
+		else if(pGPIOHandle->pGPIOx == GPIOC)
+			regValue = 2;
+		else if(pGPIOHandle->pGPIOx == GPIOD)
+			regValue = 3;
+		else if(pGPIOHandle->pGPIOx == GPIOE)
+			regValue = 4;
+		else if(pGPIOHandle->pGPIOx == GPIOF)
+			regValue = 5;
+		else if(pGPIOHandle->pGPIOx == GPIOG)
+			regValue = 6;
+		else if(pGPIOHandle->pGPIOx == GPIOH)
+			regValue = 7;
+		else if(pGPIOHandle->pGPIOx == GPIOI)
+			regValue = 8;
+
+		// Enable the SYSCFG clock
+		SYSCFG_PCLK_EN();
+
+		SYSCFG->EXTICR[regAddrOffset] &= ~(0x0F << (regOffset * 4));
+		SYSCFG->EXTICR[regAddrOffset] |= (regValue << (regOffset * 4));
+
+		// Configure the interrupt masking using IMR register
+		EXTI->IMR |= (0x01 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 	}
 
 	// Pin Speed Configuration
@@ -130,7 +179,7 @@ void GPIO_Deinit(GPIO_RegDef_t *pGPIOx) {
  * Data Read and Write
  */
 uint8_t GPIO_ReadFromInputPin(GPIO_RegDef_t *pGPIOx, uint8_t pinNumber) {
-	return (uint8_t)((pGPIOx->IDR >> 8) & 0x00000001);
+    return (uint8_t)((pGPIOx->IDR >> pinNumber) & 0x1);
 }
 
 uint16_t GPIO_ReadFromInputPort(GPIO_RegDef_t *pGPIOx) {

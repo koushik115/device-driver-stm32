@@ -114,6 +114,15 @@ typedef struct {
 }RCC_RegDef_t;
 
 typedef struct {
+	volatile uint32_t IMR;
+	volatile uint32_t EMR;
+	volatile uint32_t RTSR;
+	volatile uint32_t FTSR;
+	volatile uint32_t SWIER;
+	volatile uint32_t PR;
+}EXTI_RegDef_t;
+
+typedef struct {
 	volatile uint32_t MODER;
 	volatile uint32_t OTYPER;
 	volatile uint32_t OSPEEDR;
@@ -126,10 +135,20 @@ typedef struct {
 	volatile uint32_t AFRH;
 }GPIO_RegDef_t;
 
+typedef struct {
+	volatile uint32_t MEMRMP;
+	volatile uint32_t PMC;
+	volatile uint32_t EXTICR[4];
+	volatile uint32_t RESERVED[3];
+	volatile uint32_t CMPCR;
+}SYSCFG_RegDef_t;
+
 /*
  * Peripheral Definition
  */
 #define RCC		((RCC_RegDef_t *)RCC_PERIPH_BASE_ADDR)
+#define EXTI	((EXTI_RegDef_t *)EXTI_PERIPH_BASE_ADDR)
+#define SYSCFG  ((SYSCFG_RegDef_t *)SYSCFG_PERIPH_BASE_ADDR)
 #define GPIOA	((GPIO_RegDef_t *)GPIOA_BASE_ADDR)
 #define GPIOB	((GPIO_RegDef_t *)GPIOB_BASE_ADDR)
 #define GPIOC	((GPIO_RegDef_t *)GPIOC_BASE_ADDR)
