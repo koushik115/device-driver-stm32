@@ -20,6 +20,27 @@
 #define ENABLE						SET
 #define DISABLE						RESET
 
+/*********************************** Processor Specific MACRO(s)*****************************/
+/*
+ * Base Address of NVIC_ISERx
+ */
+#define NVIC_ISER0		(volatile uint32_t *)0xE000E100
+#define NVIC_ISER1		(volatile uint32_t *)0XE000E104
+#define NVIC_ISER2		(volatile uint32_t *)0xE000E108
+#define NVIC_ISER3		(volatile uint32_t *)0xE000E10C
+
+/*
+ * Base Address of NVIC_ISERx
+ */
+#define NVIC_ICER0		(volatile uint32_t *)0xE000E180
+#define NVIC_ICER1		(volatile uint32_t *)0xE000E184
+#define NVIC_ICER2		(volatile uint32_t *)0xE000E188
+#define NVIC_ICER3		(volatile uint32_t *)0xE000E18C
+
+#define NVIC_IPR0		(volatile uint32_t *)0xE000E400
+
+/*********************************** End of Processor Specific MACRO(s)*****************************/
+
 /*
  * Memory Base Addresses
  */
